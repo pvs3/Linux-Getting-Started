@@ -2,14 +2,25 @@
 
 TOC:
 
+1. Basic commands
+2. Users
+3. Files
+4. Bash
+
 ## 1 Basic commands
 
-- 1.1 ls
-- 1.2 cd
-- 1.3 pwd
-- 1.4 mkdir
-- 1.5 cp
-- 1.6 rm
+### 1.1 Basic File & directory commands
+
+- ls
+- cd
+- pwd
+- mkdir
+- cp
+- rm
+- find
+
+### 1.2 File handling commands
+
 - cat
 - grep
 - which
@@ -19,13 +30,25 @@ TOC:
 - type
 - stat
 - tee
-- uname
-- id
-- who
+
+### 1.3 File permission commands
+
 - chmod
 - umask
 - setfacl
 - getfacl
+
+### 1.4 User commands
+
+- uname
+- id
+- who
+
+### 1.5 System commands
+
+- ps
+- top
+- kill
 
 **cd** : Change dir
 
@@ -51,6 +74,43 @@ mkdir -p /home/penguin/AWS/BigData/Mobile
 -> -p = make all 'parent dirs if they do not exist !
 ```
 
+**find**
+
+```
+find . -type f -name 'test*'                    -> return all files under this dir starting with 'test'
+find . -type f -iname 'test*'                   -> idem but 'i' makes it CASE INSENSITIVE !!
+
+find . -type f -name '*.json' -maxdepth 1        -> search only 1 dir deep = 'this dir'
+find . -type f -name '*json' -maxdepth 1 -exec rm {} +
+                                                -> executes 'rm' on all found files in THIS dir (+=end)
+
+
+find . -type f mmin -10                         -> find changed files < 10 minutes in this dir.
+find . -type f mmin +5 mmin -15                 -> returns chenged file between 5 and 15 min
+find . -type f mtime -10                        ->  returns files changed within last 10 days
+find . -type f ctime
+
+find / -name "*.json" -print 2>/dev/null        -> find under root('/'), all 'json-files' and blackhole errors (2=stderr) (cfr permission denied)
+find / -user penguin -name "Book*" -print 2>/dev/null
+
+find / -size +5M                        -> find files > 5M in root dir (use k=KiloByte and G=Giga)
+find / -empty                           -> find all O byte files
+
+find / -perm 777
+
+find myWebsite -exec chown penguin:www-data {} +
+                                        -> -exec .. to execute a cmd
+                                        -> user=penguin group=www-data
+                                        -> {} placholder for find result and + ='end of exec'
+find myWebsite -type d -exec chmod 775 {} +
+                                        -> sets all dir+subdir permissions to 775
+find myWebsite -type f -exec chmod 644 {} +
+                                        -> sets all file permissions to 644
+!Check it!
+find myWebsite -chmod 775
+ind myWebsite -chmod 664
+```
+
 **grep** Global Regular Expression Print
 
 **umask**
@@ -62,11 +122,44 @@ How ?
 - umask = 0022 (default)
 - permissions = 0666 -umask = 0644 (rx-|r--|r--)
 
-### 1.1
+**ps**
 
-### 1.2
+    ps (with no '-') = BSD syntax
+    ps - = Unix/Linux syntax
 
-### 1.3
+    Mixing both, BSD and Unix/Linux, can become confusing!
+
+    **remark = both are different !!!** eg 'ps aux >< ps -aux'
+
+```
+ps              -> shows running **processes** in current shell' (default ps is filtered!)
+ps -f           -> show 'full' (details) -including 'Parent PIP = PPID'
+ps -l           -> show 'long' (details) -> even more then '-f'
+ps -e == ps -A  -> shows 'all' processes or deamon = process with no relation to tty
+ps -a           -> shows 'all' processes - -related with tty terminal
+ps -u           -> add 'user info'
+ps -aux         -> show 'all' (-a) processes for 'user'(-u) and 'user=x(all users)'
+ps -aupenguin   -> show 'all' (-a) processes for 'user'(-u) and 'user=penguin'
+ps x            -> !BSD notation! = lift the tty restriction
+ps a            -> !BSD notation! = lift the 'only yourself restriction
+ps u            -> !BSD notation! = full details (u user oriented format)
+ps aux          -> !BSD notation! = all processes
+ps ax == ps -ef -> (a all process) == (-e every process long_format)
+```
+
+**top**
+
+Shows top processes
+
+```
+top
+```
+
+**kill**
+
+```
+kill 1297       -> kills process PID=1297
+```
 
 ## 2 Users
 
@@ -133,7 +226,7 @@ useradd penguin -m -s /bin/bash -g users
 
 **Remark : ** - '~' = short for home dir, for user 'penguin' this is: /home/penguin
 
-<img src="/images/standard-unixfilesystem-hierarchy.png" width="800px">
+<img src="/images/standard-unix-filesystem-hierarchy.png" width="800px">
 
 ### 3.2 File security
 
@@ -290,3 +383,128 @@ setfacl --modify u:pengiun:777 mysecretFile.txt
 Now we see a '+' at the end of the permissions indicating one or more additional 'acl'
 
 <img src="/images/ls_acl.png" width="800px">
+
+## 4 Bash
+
+Bash = Born Again Shell
+
+    - Standard Input    - default = keyboard
+    - Standard Output   - default = display
+    - Standard Error    - default =
+
+- '\*' = match anything zero or more
+- '?' = match anything but only one char
+- '[a-z]' = match a lowercase char between a and z
+- '!' = for running a cmd nr
+- ';' = for separating and executing multiple commands
+
+```
+ls Pete*        -> will match 'Pete', 'Peter', Petersen', etc
+ls Pete?        -> will match 'Peter' but not rest from above
+ls Pete?*       -> will match everything from above except 'Pete'
+ls Pete[r,rsen] -> will match 'Peter' and 'Petersen'
+
+!41             -> This runs the 41-th cmd from your 'history' eg: history
+
+cat /etc/passw | grep penguin ; su penguin ; cd /home/penguin/data -> eg ; = multiple cmds
+```
+
+### 4.1 Bash variables
+
+**Remark:** All variables exits only in the shel and not the child shells (cfr bash in bash) unless you **EXPORT** them !!!
+
+```
+PS1='\u@\h$ '               -> defines the prompt variable with 'user@host$'
+myCar = 'Mustang'
+```
+
+### 4.2 Redirection
+
+- **<** = redirect input
+- **>** = redirect output
+
+```
+* '> file'      -> redirects stdout to file
+* '1> file'      -> redirects stdout to file
+* '2> file'      -> redirects stderr to file
+* '&> file'      -> redirects stdout and stderr to file
+```
+
+grep penguin < /etc/passwd -> take '/etc/passwd' as input for grep
+
+```
+cat /etc/passwd | grep penguin > mylog.txt -> output of 'cat+grep' is redirected to file. Thus not visible on screen.
+```
+
+### 4.3 Bash customization
+
+- ~/.profile -> for environment variables (cfr \$PATH) + NON specific bash config (must support bash/Zsh/..etc)
+- ~/.bashrc -> for interactive bash settings: bash aliases, bash prompt, favorite editor etc
+- ~/.bash_profile -> loading ~/.profile + ~/.bashrc (rem ubuntu has no .bash_profile but .profile)
+
+example '~/.bash_profile'
+
+```
+. ~/.profile . ~/.bashrc
+```
+
+#### Sourcing a File
+
+**Sourcing a file** means 'reading' the file and 'executing' every line in this file as if it was typed at the prompt. If we edit '.bash_profile' we have to 'run' this file to take effect.
+
+```
+source .bash_profile . .bash_profile = same as above (cfr 'type .' )
+```
+
+### 4.4 Prompts
+
+Ther are 4 prompts
+
+- PS1 = primary (normal) prompt
+- PS2 = when entering a incomplete command -> default = '>' = means enter more stuff
+- PS3 = when using a 'select' statement - when scripting
+- PS4 = when debugging
+
+PS1 and PS2 are mostly used.
+
+#### PS2 example
+
+While 'true' + enter -> prompt becomes 'PS2'. Then we enter some commands and after executing we return to PS1. Result: do 'ls' and after 10 sec clear screen.
+
+```
+\$ while true
+
+> do ls -al sleep 10 clear done
+```
+
+**Remark:** Set PS2 = "Did you forget something? #" -> this way it will be ealisy noticed if you mistyped something! Don't foreget to EXPORT is in .bashrc
+
+### 4.5 Aliases
+
+```
+alias -> lists all aliases alias l='ls -laih' -> l=long a=all i=Inode nr h=human readable size (K/M/G) alias mydate='date +"%d:%m:%Y"' -> output = '13:04:2019'
+```
+
+### 4.6 functions
+
+This is the next thing after 'aliases'. Ideal for executing multiple commands at once. Function are run in memory and are therfore faster than scripts or aliases
+
+You can add them in '.bashrc' and call them in the shell. eg: 'myRef'
+
+```
+function myRef () { source ~/.profile source ~/.bashrc clear date }
+```
+
+### 4.7 set and shopt (shell options)
+
+Both are used to config various parameters of the shell.
+
+```
+set -o -> lists all set parameters
+
+set -o noclobber -> 'to clobber = overwrite unintentionally ! '-o turns it ON'= you can NOT overwrite (default) set +o noclober -> '+o turns it FF' -> you can overwrite a file
+```
+
+```
+shopt -> list all shopt parameters shopt -s cdspell -> tries to correct and match existing cmd
+```
