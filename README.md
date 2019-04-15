@@ -131,7 +131,7 @@ How ?
 
     Mixing both, BSD and Unix/Linux, can become confusing!
 
-    **remark = both are different !!!** eg 'ps aux >< ps -aux'
+**remark = both are different !!!** eg 'ps aux >< ps -aux'
 
 ```
 ps              -> shows running **processes** in current shell' (default ps is filtered!)
@@ -199,7 +199,7 @@ userdel -rf polarbear       -> -r deletes /home/polarbear dir + mail -f = force 
 groupadd -g 916 testers         -> adds a group (see /etc/group) with id=916 named 'testers'
 ```
 
-How to make a user be member of multiple groups? -> edit /etc/group and add all groups (spearated with ',' to the specific user)
+How to make a user be member of multiple groups? -> edit /etc/group and add all groups (separated with ',')
 
 ```
 penguin:x:1000:users,testers    -> user 'penguin' now member of 'users' and 'testers
@@ -209,10 +209,10 @@ penguin:x:1000:users,testers    -> user 'penguin' now member of 'users' and 'tes
 
 Remark: You have to : 'apt-get install sudo' (sometimes sudo is not installed-> no '/etc/sudoers' file)
 
-If everybody can login as root -> BAD. Because in case of problem there is no way of actually knowing who did it. Solution = give specific users 'root rights' and then they van perform 'sudu ...' under there login.
+If everybody can login as root -> BAD. Because in case of problem there is no way of actually knowing who did it. Solution = give specific users 'root rights' and then they can perform 'sudo ...' under there login account.
 
 ```
-cat /etc/grouo          -> lists all the (user)groups
+cat /etc/group          -> lists all the (user)groups
 cat /etc/sudoers        -> add user to
 passwd penguin          -> as 'root' we can set anybody's password!
 ```
@@ -257,9 +257,9 @@ How to add a user to 'sudo' ?
     - '/lib'    = Libraries
     - '/lib64'  = 64 - bit libraries
     - '/media'  = external plugable media (mainly storage) eg USB drives
-    - '/mnt'     = mount = for manualy mounting drives. Today not used very much (? except Dockert ?)
-    - '/opt'    = for installation of add- software.
-                    **remark: ** there is a subtile difference between /opt and /usr/local
+    - '/mnt'     = mount = for manualy mounting drives. Today not used very much (? except Docker ?)
+    - '/opt'    = for installation of add-on software.
+                    <strong>remark: <\strong> there is a subtile difference between /opt and /usr/local
     - '/proc'   = virtual dir - created every launch- with info about your computer: CPU, kernel, etc
     - '/run'    = (new dir) where system processes write temp data -> DO NOT TOUCH !!
     - '/sbin'   = dir for 'superuser' programs (eg fdisk)
@@ -296,7 +296,7 @@ example:
         -       |    6   |   4   |   4    == chmod 644 == user can read/write and rest can read
 ```
 
-**remark: ** | 1 1 1 | == 7 => chmod 777 set read/write/execute for user/group/all = max privilage <br> Also called: **symbolic notation** versus **numeric notation**
+**remark:** | 1 1 1 | == 7 => chmod 777 set read/write/execute for user/group/all = max privilage <br> Also called: **symbolic notation** versus **numeric notation**
 
 <img src="/images/file_example_chmod777.png" width="600px">
 
@@ -324,7 +324,7 @@ example:
 
 Sharing or not sharing same Inode has major consequences: rem: 'ls -i' gives Inode number
 
-_HardLinks_
+**HardLinks**
 
 - links are 'pointers' to the same Inode
   - file type = '-'
@@ -333,7 +333,7 @@ _HardLinks_
 
 <img src="/images/hard_link.png" width="600px">
 
-_Symbolic Links_
+**Symbolic Links**
 
 - links point to **different** Inode
   - file type = 'l' = link
@@ -388,12 +388,9 @@ eg:
     - 777 == 111|111|111 == rwx|rwx|rwx
 
 ```
-chmod u=rwx myfile.txt          -> sets rwx to user
-chmod u-x   myfile.txt          -> prohibits x (execution) for user
-chmod u+x   myScript            -> adds x permission tot user
+chmod 644 myfile.txt          -> sets rw-|r--|r--
+chmod 777 myfile.txt          -> sets rwx|rwx|rwx
 ```
-
-<img src="/images/chmod_symbolic.png" width="600px">
 
 ### 3.4.2 Changing permissions on directories
 
@@ -435,7 +432,7 @@ Bash = Born Again Shell
 
     - Standard Input    - default = keyboard
     - Standard Output   - default = display
-    - Standard Error    - default =
+    - Standard Error    - default = display
 
 - '\*' = match anything zero or more
 - '?' = match anything but only one char
@@ -490,7 +487,8 @@ cat /etc/passwd | grep penguin > mylog.txt -> output of 'cat+grep' is redirected
 example '~/.bash_profile'
 
 ```
-. ~/.profile . ~/.bashrc
+. ~/.profile<br>
+. ~/.bashrc
 ```
 
 #### Sourcing a File
@@ -498,7 +496,8 @@ example '~/.bash_profile'
 **Sourcing a file** means 'reading' the file and 'executing' every line in this file as if it was typed at the prompt. If we edit '.bash_profile' we have to 'run' this file to take effect.
 
 ```
-source .bash_profile . .bash_profile = same as above (cfr 'type .' )
+source .bash_profile <br>
+. .bash_profile = same as above (cfr 'type .' )
 ```
 
 ### 4.4 Prompts
@@ -527,7 +526,8 @@ While 'true' + enter -> prompt becomes 'PS2'. Then we enter some commands and af
 ### 4.5 Aliases
 
 ```
-alias -> lists all aliases alias l='ls -laih' -> l=long a=all i=Inode nr h=human readable size (K/M/G) alias mydate='date +"%d:%m:%Y"' -> output = '13:04:2019'
+alias -> lists all aliases alias l='ls -laih' -> l=long a=all i=Inode nr h=human readable size (K/M/G) <br>
+alias mydate='date +"%d:%m:%Y"' -> output = '13:04:2019'
 ```
 
 ### 4.6 functions
@@ -641,7 +641,9 @@ ifconfig -a                 -> all ip/ipv6 - MAC info
 
 ### Network Files
 
-/etc/hosts -> for configuring hostnames & Ip addresses /etc/nsswitch.conf -> dictates where to look first: locally/server x,.. ! cfr DNS, passwords,.. /etc/resolv.conf -> resolve restrictions eg: max 3 DNS entries
+- /etc/hosts -> for configuring hostnames & Ip addresses
+- /etc/nsswitch.conf -> dictates where to look first: locally/server x,.. ! cfr DNS, passwords,..
+- /etc/resolv.conf -> resolve restrictions eg: max 3 DNS entries
 
 ### 6 System
 
@@ -655,6 +657,9 @@ Start sequence:
 
 #### 6.2 System Security
 
-**TCP Wrappers** /etc/hosts.allow /etc/hosts.deny
+**TCP Wrappers**
+
+- /etc/hosts.allow
+- /etc/hosts.deny
 
 In both files yo can specifiy what TCP connection can be allowed
