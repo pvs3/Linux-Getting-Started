@@ -6,6 +6,8 @@ TOC:
 2. Users
 3. Files
 4. Bash
+5. Networking
+6. System
 
 ## 1 Basic commands
 
@@ -172,9 +174,9 @@ kill 1297       -> kills process PID=1297
 
 example:
 
-<img src="/images/get_passwd_details4user.png" width="800px">
+<img src="/images/get_passwd_details4user.png" width="500px">
 
-### 2.2 Adding users
+### 2.2 Adding and deleting users
 
 ```
 useradd penguin -m -s /bin/bash -g users
@@ -183,7 +185,50 @@ useradd penguin -m -s /bin/bash -g users
 -> -g = belongs to group
 ```
 
+How to delete a user?
+
+```
+userdel -rf polarbear       -> -r deletes /home/polarbear dir + mail -f = force (even if logged in)
+```
+
 **Remark:** you have to have permission in order to create users , usually 'root'.
+
+### 2.3 groups
+
+```
+groupadd -g 916 testers         -> adds a group (see /etc/group) with id=916 named 'testers'
+```
+
+How to make a user be member of multiple groups? -> edit /etc/group and add all groups (spearated with ',' to the specific user)
+
+```
+penguin:x:1000:users,testers    -> user 'penguin' now member of 'users' and 'testers
+```
+
+### 2.4 sudo
+
+Remark: You have to : 'apt-get install sudo' (sometimes sudo is not installed-> no '/etc/sudoers' file)
+
+If everybody can login as root -> BAD. Because in case of problem there is no way of actually knowing who did it. Solution = give specific users 'root rights' and then they van perform 'sudu ...' under there login.
+
+```
+cat /etc/grouo          -> lists all the (user)groups
+cat /etc/sudoers        -> add user to
+passwd penguin          -> as 'root' we can set anybody's password!
+```
+
+Config: /etc/sudoers
+
+How to add a user to 'sudo' ?
+
+1. login as 'root'
+2. Create user: 'useradd penguin -m -s /bin/bash -g users'
+3. Create passwd: 'passwd penguin'
+4. Add user to sudoers: 'usermod -aG sudo penguin'
+5. test:
+
+   - 'su penguin'
+   - 'sudo ls /root' -> if access then ok :-)
 
 ## 3 Files
 
@@ -242,7 +287,7 @@ useradd penguin -m -s /bin/bash -g users
 
 example:
 
-<img src="/images/file_example.png" width="800px">
+<img src="/images/file_example.png" width="600px">
 
 ```
                 |  r w x | r w x | r w x
@@ -253,7 +298,7 @@ example:
 
 **remark: ** | 1 1 1 | == 7 => chmod 777 set read/write/execute for user/group/all = max privilage <br> Also called: **symbolic notation** versus **numeric notation**
 
-<img src="/images/file_example_chmod777.png" width="800px">
+<img src="/images/file_example_chmod777.png" width="600px">
 
 **first char**
 
@@ -286,7 +331,7 @@ _HardLinks_
   - Thus if file to which the link refered is deleted -> link stays intact because Inode nr stiil exists
   - if Chmod on file -> this is on Inode -> thus for ALL links
 
-<img src="/images/hard_link.png" width="800px">
+<img src="/images/hard_link.png" width="600px">
 
 _Symbolic Links_
 
@@ -328,7 +373,7 @@ chmod u-x   myfile.txt          -> prohibits x (execution) for user
 chmod u+x   myScript            -> adds x permission tot user
 ```
 
-<img src="/images/chmod_symbolic.png" width="800px">
+<img src="/images/chmod_symbolic.png" width="600px">
 
 **Format numeric mode:** <br>
 
@@ -348,13 +393,13 @@ chmod u-x   myfile.txt          -> prohibits x (execution) for user
 chmod u+x   myScript            -> adds x permission tot user
 ```
 
-<img src="/images/chmod_symbolic.png" width="800px">
+<img src="/images/chmod_symbolic.png" width="600px">
 
 ### 3.4.2 Changing permissions on directories
 
 First line specifies permissions of the actual dir (see 'dot' at the end)
 
-<img src="/images/dir_permissions.png" width="800px">
+<img src="/images/dir_permissions.png" width="600px">
 
 ```
 chmod 755 .         -> sets the permissions as above on the actual directory
@@ -370,7 +415,7 @@ ACL = Access List
 
 **getfacl**
 
-<img src="/images/getfacl.png" width="800px">
+<img src="/images/getfacl.png" width="600px">
 
 **setfacl**
 
@@ -378,11 +423,11 @@ ACL = Access List
 ```
 setfacl --modify u:pengiun:777 mysecretFile.txt
 ```
-<img src="/images/getfacl.png" width="800px">
+<img src="/images/getfacl.png" width="600px">
 
 Now we see a '+' at the end of the permissions indicating one or more additional 'acl'
 
-<img src="/images/ls_acl.png" width="800px">
+<img src="/images/ls_acl.png" width="600px">
 
 ## 4 Bash
 
@@ -508,3 +553,108 @@ set -o noclobber -> 'to clobber = overwrite unintentionally ! '-o turns it ON'= 
 ```
 shopt -> list all shopt parameters shopt -s cdspell -> tries to correct and match existing cmd
 ```
+
+```
+shopt login_shell           -> if it returns Off then => 'non login shell' (cfr bash in Docker or Mac)
+                            -> if Onn => login shell (cfr SSH)
+```
+
+**Remark:** Difference is that with 'login shell'- reads .bash_profile **AND** .bashrc With 'non login shell' - it **ONLY** sources (reads) '.bashrc' !!!
+
+### 5 Networking
+
+**Remark:** you may need to install some libraries if 'cmd not found
+
+```
+apt-get update
+apt-get install iputils-ping            -> needed for ping
+apt-get install dnsutils                -> needed for dig
+```
+
+#### Utilities
+
+- ping
+- traceroute
+- ftp
+- scp
+- ssh
+- dig
+- host
+- whois
+- telnet
+- ifconfig
+
+#### Network Files & Directories
+
+- /etc/hosts
+- /etc/nsswitch.conf
+- /etc/sysconfig/network-scripts
+- /etc/resolv.conf
+
+**ping**
+
+```
+ping -c 5 google.com
+```
+
+ipv6
+
+```
+ping6 -v -I ip6tn10 2a00:1450:400e:80d::200e
+                            -> -v = verbose -I= interface out (ip6tn10)
+                            -> tip: make alias: 'alias p6='ping6 -v -I ip6tn10'
+p6 2a00:1450:400e:80d::200e -> used with the alias
+```
+
+**Remark :** Define your ip addresses + hostname in 'hosts' to make yor life easier eg: 192.168.2.234 fw -> 'ping fw'
+
+**traceroute**
+
+```
+traceroute google.com
+```
+
+**dig**
+
+A tool to troubleshoot and solve DNS problems
+
+```
+dig wizzkid.com             -> queries the (default) DNS server and returns (default) 'A record'
+dig @8.8.8.8 wizzkid.be     -> idem but now we specify a (other) DNS server
+dig wizzkid.be MX           -> idem but returns MX (mail) record
+dig wizzkid.be NS           -> returns 'Authoritative' Name Servers (holds the records)
+dig wizzkid.be TXT
+```
+
+**host**
+
+```
+host                        -> list all host options
+host -v  google.com         -> verbose - detail info: A, AAAA, MX, etc records
+```
+
+**ifconfig**
+
+```
+ifconfig -a                 -> all ip/ipv6 - MAC info
+```
+
+### Network Files
+
+/etc/hosts -> for configuring hostnames & Ip addresses /etc/nsswitch.conf -> dictates where to look first: locally/server x,.. ! cfr DNS, passwords,.. /etc/resolv.conf -> resolve restrictions eg: max 3 DNS entries
+
+### 6 System
+
+#### 6.1 General
+
+Start sequence:
+
+1. Bios
+2. master bootloader (=part of the disk)
+3. kernel
+
+#### 6.2 System Security
+
+**TCP Wrappers** /etc/hosts.allow /etc/hosts.deny
+
+In both files yo can specifiy what TCP connection can be allowed
