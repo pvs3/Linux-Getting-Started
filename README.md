@@ -125,7 +125,28 @@ How ?
 - permissions = 0666 -umask = 0644 (rx-|r--|r--)
 
 **ps**
-
+bin:            directory
+boot:           directory
+cdrom:          directory
+dev:            directory
+etc:            directory
+home:           directory
+lib:            directory
+lib64:          directory
+lost+found:     directory
+media:          directory
+mnt:            directory
+opt:            directory
+proc:           directory
+root:           directory
+run:            directory
+sbin:           directory
+snap:           directory
+srv:            directory
+sys:            directory
+tmp:            sticky, directory
+usr:            directory
+var:            directory
     ps (with no '-') = BSD syntax
     ps - = Unix/Linux syntax
 
@@ -243,6 +264,8 @@ How to add a user to 'sudo' ?
     - '/root'   = home dir for root user -> ! not in /home
     - '/bin'    = dir for programs
     - '/boot'   = files required for starting your system -> 'DO NOT TOUCH !!'
+                  /boot/grub/grub.conf or menu.lst: boot loader
+                  /boot/vmlinuz: Linux kernel
     - '/dev'    = contains device files
                     - null  = 'black hole' eg:as stdout for files - /dev/null
                     - tty   = 'teletype' = your terminal window
@@ -253,17 +276,57 @@ How to add a user to 'sudo' ?
                     - c = 'Character device' -> eg see tty
                     - b = 'block device' = acts as a disk
     - '/etc'    = Everything To Configure -> contains mainly configuration files (eg passwd file, ...)
+                  contains also a collection of scripts to start system services at boot time
+                  Everything is readable text
+                  Interesting files
+                    - /etc/crontab: automated jobs
+                    - /etc/fstab: a table of storage devices and their mount points
+                    - /etc/passwd: user accounts
     - '/home'   = dir for working dir for users. eg: /home/penguin or /home/user2
-    - '/lib'    = Libraries
+    - '/lib'    = shared libraries (conf. dll in Windows)
     - '/lib64'  = 64 - bit libraries
     - '/media'  = external plugable media (mainly storage) eg USB drives
     - '/mnt'     = mount = for manualy mounting drives. Today not used very much (? except Docker ?)
-    - '/opt'    = for installation of add-on software.
+    - '/opt'    = for installation of add-on software. Mainly used for commercial software products.
+                  read-only and self-contained software. That is, software that does not split their files over bin, lib, 
+                  share, include like well-behaved software should.
                     <strong>remark: <\strong> there is a subtile difference between /opt and /usr/local
-    - '/proc'   = virtual dir - created every launch- with info about your computer: CPU, kernel, etc
+    - '/proc'   = virtual filesystem maintained by the kernel. The files in this directories are peepholes into the                             
+                  kernel. The files are readable and will give you a picture of how the kernel sees the computer
+                  created every launch- with info about your computer: CPU, kernel, etc
+    - '/root'   = home directory for root user
     - '/run'    = (new dir) where system processes write temp data -> DO NOT TOUCH !!
     - '/sbin'   = dir for 'superuser' programs (eg fdisk)
-    - '/usr'    = was home dir for users in the 'early days'. Now mish-mash of directory with: apps,libs,docs,wallpaper,icons, etc
+    - '/tmp'    = temporary files
+    - '/usr'    = all system-wide, read-only files installed by (or provided by) the OS
+    - '/usr/local'= system-wide, read-only files installed by the local administrator (usually, you). And that's why most     
+                    directory names from /usr are duplicated here.
+    - '~/.local'= the per-user counterpart of /usr/local, that is: software installed by (and for) each user. Like /usr, it 
+                    has its own ~/.local/share, ~/.local/bin, ~/.local/lib.
+    - '~/.local/opt'= the per-user counterpart of /opt
+
+bin:            directory
+boot:           directory
+cdrom:          directory
+dev:            directory
+etc:            directory
+home:           directory
+lib:            directory
+lib64:          directory
+lost+found:     directory
+media:          directory
+mnt:            directory
+opt:            directory
+proc:           directory
+root:           directory
+run:            directory
+sbin:           directory
+snap:           directory
+srv:            directory
+sys:            directory
+tmp:            sticky, directory
+usr:            directory
+var:            directoryy days'. Now mish-mash of directory with: apps,libs,docs,wallpaper,icons, etc
     - '/srv'    = dir for servers. eg: /srv/www (with html for your site) or /srv/ftp
     - '/sys'    = virtual dir - contains info about connected devices -> DO NOT TOUCH !!
     - '/tmp'    = tempory dir mainly used by runnings applications
