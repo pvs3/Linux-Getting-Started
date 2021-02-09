@@ -299,8 +299,13 @@ How to add a user to 'sudo' ?
     - '/sbin'   = dir for 'superuser' programs (eg fdisk)
     - '/tmp'    = temporary files
     - '/usr'    = all system-wide, read-only files installed by (or provided by) the OS
+    - '/usr/bin'= executables installed by the Linux distribution. Holds a great number of programs
+    - '/usr/lib'= shared libraries for the programs in /usr/bin
     - '/usr/local'= system-wide, read-only files installed by the local administrator (usually, you). And that's why most     
                     directory names from /usr are duplicated here.
+    - '/usr/sbin' = system adm programs
+    - '/usr/share'= shared data for programs in /usr/bin. eg. conf files, icons, screen backgrounds, sound files
+    - '/usr/share/doc' = documentation for programs in /usr/share
     - '~/.local'= the per-user counterpart of /usr/local, that is: software installed by (and for) each user. Like /usr, it 
                     has its own ~/.local/share, ~/.local/bin, ~/.local/lib.
     - '~/.local/opt'= the per-user counterpart of /opt
