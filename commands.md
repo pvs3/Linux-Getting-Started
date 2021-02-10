@@ -45,3 +45,16 @@ h | summary of less commands
 &pattern | display only the matching lines, not all.
 ma | mark the current position with the letter ‘a’,
 'a | go to the marked position ‘a’.
+mv src dst | move/rename file src to dst 
+cp src dst | copy src to dst
+rm src | delete src
+mv/cp/rm -v| verbose option, shows what is done
+mv/cp/rm -i| interactive option, asks for confirmation 
+type cmd | command's type: executable, shell built-in, shell function, alias
+which executable| show executable's location
+help cmd | get help for shell built-in command
+cmd --help | usage information on command
+man cmd | display manual page
+apropos searchterm | shows list of manpages related to searchterm
+whatis cmd | brief description of command
+info cmd | GNU only, alternative to man pages
