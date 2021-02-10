@@ -56,12 +56,19 @@ TOC:
 **cd** : Change dir
 
 ```
+cd directory
+-> moves to specified directory
+
 cd
 -> returns to 'home dir' eg: for user 'penguin' = /home/penguin
 
 cd ..
 -> moves one dir UP
+
+cd - 
+-> returns to previous working directory
 ```
+
 
 **pwd** : Print (actual)working dir = 'where am I now ?'
 
