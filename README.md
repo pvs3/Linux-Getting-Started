@@ -9,7 +9,8 @@ TOC:
 5. Networking
 6. System
 7. List of commands
-8. Make a bootble drive
+8. Make a bootable drive
+9. Mount a shared drive 
 
 
 ## 1 Basic commands
@@ -848,3 +849,12 @@ $ 7z x ~/Downloads/ubuntu-18.04.1-desktop-amd64.iso -o/media/blah/Ubuntu_UEFI/
 ```
 - Check to see if the USB drive now contains files with the ‘ls’ command 
 
+
+
+
+
+
+###9 Mount a shared drive
+Shared drive on server NAS/path will be mounted on /mnt/backup/
+```
+sudo mount -v -t cifs //NAS/path/ /mnt/backup/ -o username=username (on server) ,password=password (on server)
