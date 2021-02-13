@@ -806,9 +806,9 @@ whatis cmd | brief description of command
 info cmd | GNU only, alternative to man pages
 
 
-###8. Make a bootable drive (from Linux)
+### 8. Make a bootable drive (from Linux)
 
-####8.a Format the drive
+#### 8.a Format the drive
 
 - Insert your USB drive
 - open the “Disks” utility
@@ -840,7 +840,7 @@ info cmd | GNU only, alternative to man pages
 - Give the volume a name. Use underscore or hyphen iso spaces. Choose option FAT
 - When the format is complete you can click the “Play” button to mount the drive 
 
-####8.b make a UEFI drive
+#### 8.b make a UEFI drive
 - Before we copy the files to our USB stick using 7-zip (‘7z x’ command), let’s display our USB drive info and Downloads folder listing so we have an easy reference
 ```
 $ df -h | grep -i media
@@ -854,7 +854,7 @@ $ 7z x ~/Downloads/ubuntu-18.04.1-desktop-amd64.iso -o/media/blah/Ubuntu_UEFI/
 
 
 
-###9 Mount a shared drive
+### 9 Mount a shared drive
 Shared drive on server NAS/path will be mounted on /mnt/backup/
 ```
 sudo mount -v -t cifs //NAS/path/ /mnt/backup/ -o username=username (on server) ,password=password (on server)
