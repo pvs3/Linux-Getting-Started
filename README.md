@@ -2,7 +2,7 @@
 
 TOC:
 
-1. [Basic commands] (##1-Basic-commands)
+1. [Basic commands] (#1-Basic-commands)
 2. Users
 3. Files
 4. Bash
