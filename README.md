@@ -9,6 +9,8 @@ TOC:
 5. Networking
 6. System
 7. List of commands
+8. Make a bootble drive
+
 
 ## 1 Basic commands
 
@@ -801,3 +803,48 @@ man cmd | display manual page
 apropos searchterm | shows list of manpages related to searchterm
 whatis cmd | brief description of command
 info cmd | GNU only, alternative to man pages
+
+
+###8. Make a bootable drive (from Linux)
+
+####8.a Format the drive
+
+- Insert your USB drive
+- open the “Disks” utility
+- Choose your USB drive from the available drives on the left 
+- First we need to delete the old partitions that remain on the USB key.
+```
+    Open a terminal and type sudo su
+    Type fdisk -l and note your USB drive letter.
+    Type fdisk /dev/sdx (replacing x with your drive letter)
+    Type d to proceed to delete a partition
+    Type 1 to select the 1st partition and press enter
+    Type d to proceed to delete another partition (fdisk should automatically select the second partition)
+```
+- Create new partition(s)
+```
+    Type n to make a new partition
+    Type p to make this partition primary and press enter
+    Type 1 to make this the first partition and then press enter
+    Press enter to accept the default first cylinder
+    Press enter again to accept the default last cylinder
+    Type w to write the new partition information to the USB key
+    Type umount /dev/sdx (replacing x with your drive letter)
+    Type mkfs.vfat -F 32 /dev/sdx1 (replacing x with your USB key drive letter)
+    REMARK: the last two steps can be done from the Disks utility
+```
+- open the “Disks” utility
+- Choose your USB drive from the available drives on the left then click the stop button to unmount the drive 
+- Click the “gear” icon and then click Format Partition 
+- Give the volume a name. Use underscore or hyphen iso spaces. Choose option FAT
+- When the format is complete you can click the “Play” button to mount the drive 
+
+####8.b make a UEFI drive
+- Before we copy the files to our USB stick using 7-zip (‘7z x’ command), let’s display our USB drive info and Downloads folder listing so we have an easy reference
+```
+$ df -h | grep -i media
+$ ls ~/Downloads
+$ 7z x ~/Downloads/ubuntu-18.04.1-desktop-amd64.iso -o/media/blah/Ubuntu_UEFI/
+```
+- Check to see if the USB drive now contains files with the ‘ls’ command 
+
